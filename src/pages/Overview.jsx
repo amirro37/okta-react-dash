@@ -1,85 +1,55 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Chip,
-} from "@mui/material";
+import { Box, Grid, Paper, Typography } from "@mui/material";
 
-const events = [
-  { time: "2m ago", type: "user.session.start", outcome: "SUCCESS", actor: "adam@mirroiam.com" },
-  { time: "9m ago", type: "policy.evaluate_sign_on", outcome: "SUCCESS", actor: "svc-provisioning" },
-  { time: "21m ago", type: "user.mfa.factor.verify", outcome: "FAILURE", actor: "jane.doe@corp.com" },
-  { time: "55m ago", type: "group.user_membership.add", outcome: "SUCCESS", actor: "okta-admin" },
+const kpis = [
+  { label: "Active Users", value: "—" },
+  { label: "Suspended", value: "—" },
+  { label: "MFA Enrolled", value: "—" },
+  { label: "Sign-in Failures (24h)", value: "—" },
 ];
-
-function Stat({ label, value, sub }) {
-  return (
-    <Card>
-      <CardContent>
-        <Typography variant="body2" sx={{ opacity: 0.7 }}>
-          {label}
-        </Typography>
-        <Typography variant="h5" sx={{ fontWeight: 800, mt: 0.5 }}>
-          {value}
-        </Typography>
-        {sub ? (
-          <Typography variant="caption" sx={{ opacity: 0.7 }}>
-            {sub}
-          </Typography>
-        ) : null}
-      </CardContent>
-    </Card>
-  );
-}
 
 export default function Overview() {
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h5" sx={{ fontWeight: 800, mb: 2 }}>
+        Overview
+      </Typography>
+
       <Grid container spacing={2}>
-        <Grid item xs={12} md={3}>
-          <Stat label="Active Users" value="12,482" sub="Last sync: 3m" />
+        {kpis.map((k) => (
+          <Grid item xs={12} sm={6} md={3} key={k.label}>
+            <Paper sx={{ p: 2, borderRadius: 3 }}>
+              <Typography variant="body2" sx={{ opacity: 0.7 }}>
+                {k.label}
+              </Typography>
+              <Typography variant="h4" sx={{ fontWeight: 800, mt: 1 }}>
+                {k.value}
+              </Typography>
+            </Paper>
+          </Grid>
+        ))}
+
+        <Grid item xs={12} md={7}>
+          <Paper sx={{ p: 2, borderRadius: 3, height: 320 }}>
+            <Typography sx={{ fontWeight: 700, mb: 1 }}>
+              Auth Failures Trend (mock)
+            </Typography>
+            <Typography variant="body2" sx={{ opacity: 0.7 }}>
+              Next: wire to Okta System Log and graph failures by hour/day.
+            </Typography>
+          </Paper>
         </Grid>
-        <Grid item xs={12} md={3}>
-          <Stat label="MFA Coverage" value="94%" sub="FastPass: 61%" />
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <Stat label="Auth Failures (24h)" value="151" sub="Top: bad_password" />
-        </Grid>
-        <Grid item xs={12} md={3}>
-          <Stat label="Admin Changes (24h)" value="7" sub="Role grants + group adds" />
+
+        <Grid item xs={12} md={5}>
+          <Paper sx={{ p: 2, borderRadius: 3, height: 320 }}>
+            <Typography sx={{ fontWeight: 700, mb: 1 }}>
+              Recent Admin Activity (mock)
+            </Typography>
+            <Typography variant="caption" sx={{ opacity: 0.7 }}>
+              Next: role grants, group membership changes, policy edits.
+            </Typography>
+          </Paper>
         </Grid>
       </Grid>
-
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Card>
-            <CardContent>
-              <Typography variant="subtitle1" sx={{ fontWeight: 800, mb: 1 }}>
-                Recent Events
-              </Typography>
-
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Time</TableCell>
-                    <TableCell>Event</TableCell>
-                    <TableCell>Outcome</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {events.map((e, idx) => (
-                    <TableRow key={idx}>
-                      <TableCell>{e.time}</TableCell>
-                      <TableCell>
-                        <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-                          {e.type}
-                        </Typography>
-                        <Typography variant="caption" sx={{ opacity: 0.7 }}>
-
+    </Box>
+  );
+}
